@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 public class MultiServer
 {
     private ServerSocket serverSocket;
-    private static PharmacyChainOperator go = new PharmacyChainOperator();
+    private static PharmacyChainOperator pco = new PharmacyChainOperator();
     private static String goJSON;
     private final static String filePath = "info.txt";
 
@@ -22,29 +22,30 @@ public class MultiServer
     {
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
-        try {
+        try {                                                       // Отсюда
             goJSON = readFile(filePath, StandardCharsets.UTF_8);
         }
         catch (IOException e)
         {
             e.printStackTrace();
         }
-        go = gson.fromJson(goJSON, PharmacyChainOperator.class);
+        pco = gson.fromJson(goJSON, PharmacyChainOperator.class);    // Досюда
 
-//        go.addPharmacy("Весна", new Pharmacy("Дарим здоровье", "Ставропольская 101",
+//        pco.addPharmacy("Весна", new Pharmacy("Дарим здоровье", "Ставропольская 101",
 //                1, "08:00", "20:00", 20, 1, "Большое белое здание"));
-//        go.addPharmacy("Весна", new Pharmacy("Дарим красоту", "Ялтинская 10", 2,
+//        pco.addPharmacy("Весна", new Pharmacy("Дарим красоту", "Ялтинская 10", 2,
 //                "10:00", "21:00", 10, 0, "Здание на углу, первый этаж"));
 //
-//        go.addPharmacy("Здоровье", new Pharmacy("На Севернорной", "Северная 151",
+//        pco.addPharmacy("Здоровье", new Pharmacy("На Севернорной", "Северная 151",
 //                1, "06:00", "22:00", 50, 1,
 //                "Здание рядом с остановкой троллейбуса 3"));
-//        go.addPharmacy("Здоровье", new Pharmacy("В Галерее", "Северная 313",
+//        pco.addPharmacy("Здоровье", new Pharmacy("В Галерее", "Северная 313",
 //                2, "06:00", "22:00", 550, 0,
 //                "Аптека на 3 этаже первой очереди"));
 //
-//        goJSON = gson.toJson(go);
+//        goJSON = gson.toJson(pco);
 //        writeFile(filePath, goJSON);
+//        System.out.println("Done!");
 
         serverSocket = new ServerSocket(port);
         while (true)
@@ -117,8 +118,8 @@ public class MultiServer
                         String[] ids = inputLine.substring(1).split(",");
                         int groupID = Integer.parseInt(ids[0]);
                         int examID = Integer.parseInt(ids[1]);
-                        go.delPharmacy(groupID, examID);
-                        goJSON = gson.toJson(go);
+                        pco.delPharmacy(groupID, examID);
+                        goJSON = gson.toJson(pco);
                         writeFile(filePath, goJSON);
                         out.println(goJSON);
                     }
@@ -131,8 +132,8 @@ public class MultiServer
                         int groupID = Integer.parseInt(ids[0]);
                         int examID = Integer.parseInt(ids[1]);
                         Pharmacy tempPharmacy = gson.fromJson(parts[1], Pharmacy.class);
-                        go.editPharmacy(groupID, examID, tempPharmacy);
-                        goJSON = gson.toJson(go);
+                        pco.editPharmacy(groupID, examID, tempPharmacy);
+                        goJSON = gson.toJson(pco);
                         writeFile(filePath, goJSON);
                         out.println(goJSON);
                     }
@@ -141,8 +142,8 @@ public class MultiServer
                         GsonBuilder gsonBuilder = new GsonBuilder();
                         Gson gson = gsonBuilder.create();
                         PharmacyChainOperator tempGo = gson.fromJson(inputLine.substring(1), PharmacyChainOperator.class);
-                        go.setPharmacyChains(tempGo.getPharmacyChains());
-                        goJSON = gson.toJson(go);
+                        pco.setPharmacyChains(tempGo.getPharmacyChains());
+                        goJSON = gson.toJson(pco);
                         writeFile(filePath, goJSON);
                     }
                     if ('a' == inputLine.charAt(0))
@@ -151,8 +152,8 @@ public class MultiServer
                         Gson gson = gsonBuilder.create();
                         String[] parts = inputLine.substring(1).split("##");
                         Pharmacy tempPharmacy = gson.fromJson(parts[1], Pharmacy.class);
-                        go.addPharmacy(parts[0], tempPharmacy);
-                        goJSON = gson.toJson(go);
+                        pco.addPharmacy(parts[0], tempPharmacy);
+                        goJSON = gson.toJson(pco);
                         writeFile(filePath, goJSON);
                         out.println(goJSON);
                     }

@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class PharmacyChainOperator
 {
-    private int id;
+    private int id = 1;
     private ArrayList<PharmacyChain> pharmacyChains = new ArrayList<>();
 
     public void addPharmacy(String groupName, Pharmacy pharmacy)
